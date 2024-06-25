@@ -1,0 +1,23 @@
+RESOURCE_GROUP="myResourceGroup"
+ACR_NAME="myACR$RANDOM"
+LOCATION="eastus"
+
+# Create Azure Container Registry
+az acr create --resource-group $RESOURCE_GROUP --name $ACR_NAME --sku Basic --location $LOCATION
+
+#push-image-to-acr.sh
+ACR_NAME="myACR1234"
+IMAGE_NAME="myapp:v1"
+az acr login --name $ACR_NAME
+
+docker tag $IMAGE_NAME $ACR_NAME.azurecr.io/$IMAGE_NAME
+
+docker push $ACR_NAME.azurecr.io/$IMAGE_NAME
+
+#pull-image-from-acr.sh
+
+ACR_NAME="myACR1234"
+IMAGE_NAME="myapp:v1"
+az acr login --name $ACR_NAME
+
+docker pull $ACR_NAME.azurecr.io/$IMAGE_NAME
