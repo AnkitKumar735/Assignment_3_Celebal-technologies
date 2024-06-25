@@ -1,0 +1,23 @@
+RESOURCE_GROUP="myResourceGroup"
+CONTAINER_GROUP_NAME="myContainerGroup"
+CONTAINER_INSTANCE_NAME="myContainerInstance"
+ACR_NAME="myACR1234"
+IMAGE_NAME="myapp:v1"
+
+# Create Container Group
+az container create \
+  --resource-group $RESOURCE_GROUP \
+  --name $CONTAINER_GROUP_NAME \
+  --image $ACR_NAME.azurecr.io/$IMAGE_NAME \
+  --cpu 1 \
+  --memory 1 \
+  --registry-login-server $ACR_NAME.azurecr.io \
+  --registry-username $(az acr credential show --name $ACR_NAME --query "username" -o tsv) \
+  --registry-password $(az acr credential show --name $ACR_NAME --query "passwords[0].value" -o tsv) \
+  --dns-name-label $CONTAINER_GROUP_NAME \
+  --ports 80
+
+CONTAINER_GROUP_NAME="myContainerGroup"
+
+# Test Container Group Functionality
+curl http://$CONTAINER_GROUP_NAME.eastus.azurecontainer.io
