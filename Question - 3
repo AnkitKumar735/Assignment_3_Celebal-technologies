@@ -1,0 +1,19 @@
+RESOURCE_GROUP="myResourceGroup"
+APP_SERVICE_PLAN_NAME="myAppServicePlan"
+WEB_APP_NAME="myWebApp$RANDOM"
+
+# Create Web App
+az webapp create \
+  --resource-group $RESOURCE_GROUP \
+  --plan $APP_SERVICE_PLAN_NAME \
+  --name $WEB_APP_NAME
+
+#deploy-welcome-page.sh
+RESOURCE_GROUP="myResourceGroup"
+WEB_APP_NAME="myWebApp1234"
+
+# Prepare a simple welcome page
+echo "<html><body><h1>Welcome to Azure Web App!</h1></body></html>" > index.html
+
+# Deploy the welcome page to the Web App
+az webapp up --resource-group $RESOURCE_GROUP --name $WEB_APP_NAME --src-path ./index.html --html
